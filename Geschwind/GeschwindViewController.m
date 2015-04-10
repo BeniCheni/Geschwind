@@ -144,11 +144,11 @@
 #pragma mark - UIWebViewDelegate
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-    if ([self.textField.text isEqualToString:@""]) {
+    if ([self.textField.text length] == 0) {
         [self popAlert:error errorMessage:NSLocalizedString(@"Empty URL", @"Empty URL")];
+    } else {
+        [self popAlert:error errorMessage:NSLocalizedString(@"Error", @"Error")];
     }
-    
-    [self popAlert:error errorMessage:NSLocalizedString(@"Error", @"Error")];
 }
 
 
