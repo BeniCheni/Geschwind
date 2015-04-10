@@ -14,6 +14,7 @@
 		FE71F79A1AD76E5600D5E343 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE71F7991AD76E5600D5E343 /* Images.xcassets */; };
 		FE71F79D1AD76E5600D5E343 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE71F79B1AD76E5600D5E343 /* LaunchScreen.xib */; };
 		FE71F7A91AD76E5600D5E343 /* GeschwindTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FE71F7A81AD76E5600D5E343 /* GeschwindTests.m */; };
+		FEB797AA1AD770710013BAA0 /* GeschwindViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FEB797A91AD770710013BAA0 /* GeschwindViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,8 @@
 		FE71F7A21AD76E5600D5E343 /* GeschwindTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GeschwindTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE71F7A71AD76E5600D5E343 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FE71F7A81AD76E5600D5E343 /* GeschwindTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeschwindTests.m; sourceTree = "<group>"; };
+		FEB797A81AD770710013BAA0 /* GeschwindViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeschwindViewController.h; sourceTree = "<group>"; };
+		FEB797A91AD770710013BAA0 /* GeschwindViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeschwindViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +88,8 @@
 				FE71F7911AD76E5600D5E343 /* AppDelegate.m */,
 				FE71F7931AD76E5600D5E343 /* ViewController.h */,
 				FE71F7941AD76E5600D5E343 /* ViewController.m */,
+				FEB797A81AD770710013BAA0 /* GeschwindViewController.h */,
+				FEB797A91AD770710013BAA0 /* GeschwindViewController.m */,
 				FE71F7961AD76E5600D5E343 /* Main.storyboard */,
 				FE71F7991AD76E5600D5E343 /* Images.xcassets */,
 				FE71F79B1AD76E5600D5E343 /* LaunchScreen.xib */,
@@ -222,6 +227,7 @@
 				FE71F7951AD76E5600D5E343 /* ViewController.m in Sources */,
 				FE71F7921AD76E5600D5E343 /* AppDelegate.m in Sources */,
 				FE71F78F1AD76E5600D5E343 /* main.m in Sources */,
+				FEB797AA1AD770710013BAA0 /* GeschwindViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,6 +424,7 @@
 				FE71F7AE1AD76E5600D5E343 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FE71F7AF1AD76E5600D5E343 /* Build configuration list for PBXNativeTarget "GeschwindTests" */ = {
 			isa = XCConfigurationList;
@@ -426,6 +433,7 @@
 				FE71F7B11AD76E5600D5E343 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
