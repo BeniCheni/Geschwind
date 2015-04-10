@@ -16,6 +16,9 @@
 @property (nonatomic, strong) UIButton *forwardButton;
 @property (nonatomic, strong) UIButton *stopButton;
 @property (nonatomic, strong) UIButton *reloadButton;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+
+@property (nonatomic, assign) NSUInteger frameCount;
 
 @end
 
@@ -51,24 +54,20 @@
        appViewController.stopButton,
        appViewController.reloadButton] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
            UIButton *button = (UIButton *) obj;
-           [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+           [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
            
            switch (idx) {
                case 0:
                    [button setTitle:NSLocalizedString(@"Back", @"Back command") forState:UIControlStateNormal];
-                   [button addTarget:appViewController.webview action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
                    break;
                case 1:
                    [button setTitle:NSLocalizedString(@"Forward", @"Back command") forState:UIControlStateNormal];
-                   [button addTarget:appViewController.webview action:@selector(goForward) forControlEvents:UIControlEventTouchUpInside];
                    break;
                case 2:
                    [button setTitle:NSLocalizedString(@"Stop", @"Stop command") forState:UIControlStateNormal];
-                   [button addTarget:appViewController.webview action:@selector(stopLoading) forControlEvents:UIControlEventTouchUpInside];
                    break;
                case 3:
                    [button setTitle:NSLocalizedString(@"Refresh", @"Reload command") forState:UIControlStateNormal];
-                   [button addTarget:appViewController.webview action:@selector(reload) forControlEvents:UIControlEventTouchUpInside];
                    break;
                default:
                    break;
@@ -94,8 +93,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view.
     self.edgesForExtendedLayout = UIRectEdgeNone;
+    
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -143,14 +146,30 @@
 
 #pragma mark - UIWebViewDelegate
 
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-    if ([self.textField.text length] == 0) {
-        [self popAlert:error errorMessage:NSLocalizedString(@"Empty URL", @"Empty URL")];
-    } else {
-        [self popAlert:error errorMessage:NSLocalizedString(@"Error", @"Error")];
-    }
+- (void)webViewDidStartLoad:(UIWebView *)webView {
+    self.frameCount++;
+    [self updateButtonsAndTitle];
 }
 
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    self.frameCount--;
+    [self updateButtonsAndTitle];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+    if (error.code != -999) {
+        if ([self.textField.text length] == 0) {
+            [self popAlert:error errorMessage:NSLocalizedString(@"Empty URL", @"Empty URL")];
+        } else {
+            [self popAlert:error errorMessage:NSLocalizedString(@"Error", @"Error")];
+        }
+    }
+    
+    self.frameCount--;
+    [self updateButtonsAndTitle];
+}
+
+#pragma mark - Miscellaneous
 
 - (void)popAlert:(NSError *)error errorMessage:(NSString *)message {
     // UIAlertView is deprecated in iOS8. Use UIAlertController instead
@@ -164,6 +183,34 @@
     
     [alert addAction:defaultAction];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)updateButtonsAndTitle {
+    NSString *webpageTitle = [self.webview stringByEvaluatingJavaScriptFromString:@"document.title"];
+    
+    if (webpageTitle) {
+        self.title = webpageTitle;
+    } else {
+        self.title = self.webview.request.URL.absoluteString;
+    }
+    
+    self.frameCount > 0 ? [self.activityIndicator startAnimating] : [self.activityIndicator stopAnimating];
+    
+    [self updateButtonOnTheGo:self.backButton isActionValid:[self.webview canGoBack]];
+    [self updateButtonOnTheGo:self.forwardButton isActionValid:[self.webview canGoForward]];
+    [self updateButtonOnTheGo:self.stopButton isActionValid:self.frameCount > 0];
+    [self updateButtonOnTheGo:self.reloadButton isActionValid:self.frameCount == 0];
+}
+
+- (void)updateButtonOnTheGo:(UIButton *) button isActionValid:(BOOL) action {
+    if (action) {
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        button.enabled = YES;
+        [button addTarget:self.webview action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        button.enabled = NO;
+    }
 }
 
 /*
