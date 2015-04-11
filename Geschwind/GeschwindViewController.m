@@ -17,6 +17,7 @@
 @property (nonatomic, strong) UIButton *stopButton;
 @property (nonatomic, strong) UIButton *reloadButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, strong) NSString *searchPhrase;
 
 @property (nonatomic, assign) NSUInteger frameCount;
 
@@ -36,7 +37,7 @@
     appViewController.textField.returnKeyType = UIReturnKeyDone;
     appViewController.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     appViewController.textField.autocorrectionType = UITextAutocorrectionTypeNo;
-    appViewController.textField.placeholder = NSLocalizedString(@"Website URL", @"Placeholder text for web browser URL field");
+    appViewController.textField.placeholder = NSLocalizedString(@"Website URL or Search Keyword(s)", @"Placeholder text for web browser URL field");
     appViewController.textField.backgroundColor = [UIColor colorWithWhite:220/255.0f alpha:1];
     appViewController.textField.delegate = appViewController;
     
@@ -96,7 +97,6 @@
     
     // Do any additional setup after loading the view.
     self.edgesForExtendedLayout = UIRectEdgeNone;
-    
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
 }
@@ -128,12 +128,27 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     
-    NSString *URLString = textField.text;
+    NSMutableString *URLString = [NSMutableString string];
+    NSArray *keywords = [textField.text componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    keywords = [keywords filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
+    
+    NSUInteger keywordCount = [keywords count];
+    
+    for (int i = 0; i < keywordCount; i++) {
+        [URLString appendString: (NSString *) keywords[i]];
+        
+        if ((keywordCount - i) != 1) {  // upper bound of array - index == 1 when the item is the last one in the array
+            [URLString appendString:@"+"];
+        }
+    }
+    
+    self.searchPhrase = (NSString *) URLString;
     
     NSURL *URL = [NSURL URLWithString:URLString];
     
     if (!URL.scheme) {
-        URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@", URLString]];
+            URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@", URLString]];
     }
     
     if (URL) {
@@ -161,7 +176,14 @@
         if ([self.textField.text length] == 0) {
             [self popAlert:error errorMessage:NSLocalizedString(@"Empty URL", @"Empty URL")];
         } else {
-            [self popAlert:error errorMessage:NSLocalizedString(@"Error", @"Error")];
+            // Change the logic that when a target page encounters error code other than -999, the code redirect to google search.
+            NSString *urlString = [NSString stringWithFormat:@"http://www.google.com/search?q=%@", self.searchPhrase];
+            NSURL *googleSearchURL = [NSURL URLWithString:urlString];
+            
+            if (googleSearchURL) {
+                NSURLRequest *request = [NSURLRequest requestWithURL:googleSearchURL];
+                [self.webview loadRequest:request];
+            }
         }
     }
     
@@ -196,17 +218,26 @@
     
     self.frameCount > 0 ? [self.activityIndicator startAnimating] : [self.activityIndicator stopAnimating];
     
-    [self updateButtonOnTheGo:self.backButton isActionValid:[self.webview canGoBack]];
-    [self updateButtonOnTheGo:self.forwardButton isActionValid:[self.webview canGoForward]];
-    [self updateButtonOnTheGo:self.stopButton isActionValid:self.frameCount > 0];
-    [self updateButtonOnTheGo:self.reloadButton isActionValid:self.frameCount == 0];
+    [self updateButtonOnTheGo:self.backButton isActionValid:[self.webview canGoBack] actionType:@"goBack"];
+    [self updateButtonOnTheGo:self.forwardButton isActionValid:[self.webview canGoForward] actionType:@"goForward"];
+    [self updateButtonOnTheGo:self.stopButton isActionValid:self.frameCount > 0 actionType:@"stopLoading"];
+    [self updateButtonOnTheGo:self.reloadButton isActionValid:self.frameCount == 0 actionType:@"reload"];
 }
 
-- (void)updateButtonOnTheGo:(UIButton *) button isActionValid:(BOOL) action {
-    if (action) {
+- (void)updateButtonOnTheGo:(UIButton *) button isActionValid:(BOOL) validFlag actionType:(NSString *) type {
+    if (validFlag) {
+        if ([type isEqualToString:@"goBack"]) {
+            [button addTarget:self.webview action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
+        } else if ([type isEqualToString:@"goForward"]) {
+            [button addTarget:self.webview action:@selector(goForward) forControlEvents:UIControlEventTouchUpInside];
+        } else if ([type isEqualToString:@"stopLoading"]) {
+            [button addTarget:self.webview action:@selector(stopLoading) forControlEvents:UIControlEventTouchUpInside];
+        } else if ([type isEqualToString:@"reload"]) {
+            [button addTarget:self.webview action:@selector(reload) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         button.enabled = YES;
-        [button addTarget:self.webview action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
     } else {
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         button.enabled = NO;
