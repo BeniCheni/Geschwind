@@ -39,6 +39,7 @@
     appViewController.textField.autocorrectionType = UITextAutocorrectionTypeNo;
     appViewController.textField.placeholder = NSLocalizedString(@"Website URL or Search Keyword(s)", @"Placeholder text for web browser URL field");
     appViewController.textField.backgroundColor = [UIColor colorWithWhite:220/255.0f alpha:1];
+    [appViewController.textField setKeyboardType:UIKeyboardTypeWebSearch];
     appViewController.textField.delegate = appViewController;
     
     appViewController.backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
