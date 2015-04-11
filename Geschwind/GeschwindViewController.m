@@ -143,7 +143,7 @@
         }
     }
     
-    self.searchPhrase = (NSString *) URLString;
+    self.searchPhrase = [NSString stringWithString:URLString];
     
     NSURL *URL = [NSURL URLWithString:URLString];
     
