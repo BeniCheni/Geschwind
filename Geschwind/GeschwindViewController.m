@@ -139,12 +139,12 @@
     for (int i = 0; i < keywordCount; i++) {
         [URLString appendString: (NSString *) keywords[i]];
         
-        if ((keywordCount - i) != 1) {  // upper bound of array - index == 1 when the item is the last one in the array
+        if ((keywordCount - i) != 1) {  // Upper bound of array - index == 1 when the item is the last one in the array.
             [URLString appendString:@"+"];
         }
     }
     
-    self.searchPhrase = [NSString stringWithString:URLString];
+    self.searchPhrase = [NSString stringWithString:URLString]; // Search phrase is not used if a valid web address is given to the browser.
     
     NSURL *URL = [NSURL URLWithString:URLString];
     
