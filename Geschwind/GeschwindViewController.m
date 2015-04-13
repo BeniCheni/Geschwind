@@ -56,7 +56,7 @@
     [self.stopButton setTitle:NSLocalizedString(@"Stop", @"Stop comnmand") forState:UIControlStateNormal];
     [self.reloadButton setTitle:NSLocalizedString(@"Refresh", @"Reload comnmand") forState:UIControlStateNormal];
 
-    [self updateButtons];
+    [self configureButtons];
     
     appViewController.webview = [UIWebView new];
     appViewController.webview.delegate = appViewController;
@@ -213,18 +213,18 @@
     }
     
     self.frameCount > 0 ? [self.activityIndicator startAnimating] : [self.activityIndicator stopAnimating];
-    [self updateButtons];
+    [self configureButtons];
 }
 
-- (void)updateButtons {
-    [self updateButtonOnTheGo:self.backButton isActionValid:[self.webview canGoBack] actionType:@"goBack"];
-    [self updateButtonOnTheGo:self.forwardButton isActionValid:[self.webview canGoForward] actionType:@"goForward"];
-    [self updateButtonOnTheGo:self.stopButton isActionValid:self.frameCount > 0 actionType:@"stopLoading"];
-    [self updateButtonOnTheGo:self.reloadButton isActionValid:self.webview.request.URL
+- (void)configureButtons {
+    [self configureButtonOnTheGo:self.backButton isActionValid:[self.webview canGoBack] actionType:@"goBack"];
+    [self configureButtonOnTheGo:self.forwardButton isActionValid:[self.webview canGoForward] actionType:@"goForward"];
+    [self configureButtonOnTheGo:self.stopButton isActionValid:self.frameCount > 0 actionType:@"stopLoading"];
+    [self configureButtonOnTheGo:self.reloadButton isActionValid:self.webview.request.URL
      && self.frameCount == 0 actionType:@"reload"];
 }
 
-- (void)updateButtonOnTheGo:(UIButton *) button isActionValid:(BOOL) validFlag actionType: type {
+- (void)configureButtonOnTheGo:(UIButton *) button isActionValid:(BOOL) validFlag actionType: type {
     [button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     
     if (validFlag) {
