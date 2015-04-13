@@ -51,30 +51,12 @@
     appViewController.reloadButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [appViewController.reloadButton setEnabled:NO];
     
-    [@[appViewController.backButton,
-       appViewController.forwardButton,
-       appViewController.stopButton,
-       appViewController.reloadButton] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-           UIButton *button = (UIButton *) obj;
-           [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-           
-           switch (idx) {
-               case 0:
-                   [button setTitle:NSLocalizedString(@"Back", @"Back command") forState:UIControlStateNormal];
-                   break;
-               case 1:
-                   [button setTitle:NSLocalizedString(@"Forward", @"Back command") forState:UIControlStateNormal];
-                   break;
-               case 2:
-                   [button setTitle:NSLocalizedString(@"Stop", @"Stop command") forState:UIControlStateNormal];
-                   break;
-               case 3:
-                   [button setTitle:NSLocalizedString(@"Refresh", @"Reload command") forState:UIControlStateNormal];
-                   break;
-               default:
-                   break;
-           }
-      }];
+    [self.backButton setTitle:NSLocalizedString(@"Back", @"Back comnmand") forState:UIControlStateNormal];
+    [self.forwardButton setTitle:NSLocalizedString(@"Forward", @"Forward comnmand") forState:UIControlStateNormal];
+    [self.stopButton setTitle:NSLocalizedString(@"Stop", @"Stop comnmand") forState:UIControlStateNormal];
+    [self.reloadButton setTitle:NSLocalizedString(@"Refresh", @"Reload comnmand") forState:UIControlStateNormal];
+
+    [self updateButtons];
     
     appViewController.webview = [UIWebView new];
     appViewController.webview.delegate = appViewController;
@@ -164,12 +146,12 @@
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
     self.frameCount++;
-    [self updateButtonsAndTitle];
+    [self resetButtonsAndTitle];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     self.frameCount--;
-    [self updateButtonsAndTitle];
+    [self resetButtonsAndTitle];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
@@ -189,7 +171,7 @@
     }
     
     self.frameCount--;
-    [self updateButtonsAndTitle];
+    [self resetButtonsAndTitle];
 }
 
 #pragma mark - Miscellaneous
@@ -208,7 +190,20 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)updateButtonsAndTitle {
+- (void)resetWebView {
+    [self.webview removeFromSuperview];
+    
+    UIWebView *newWebView = [UIWebView new];
+    newWebView.delegate = self;
+    [self.view addSubview:newWebView];
+    
+    self.webview = newWebView;
+    
+    self.textField.text = nil;
+    [self resetButtonsAndTitle];
+}
+
+- (void)resetButtonsAndTitle {
     NSString *webpageTitle = [self.webview stringByEvaluatingJavaScriptFromString:@"document.title"];
     
     if (webpageTitle) {
@@ -218,14 +213,20 @@
     }
     
     self.frameCount > 0 ? [self.activityIndicator startAnimating] : [self.activityIndicator stopAnimating];
-    
+    [self updateButtons];
+}
+
+- (void)updateButtons {
     [self updateButtonOnTheGo:self.backButton isActionValid:[self.webview canGoBack] actionType:@"goBack"];
     [self updateButtonOnTheGo:self.forwardButton isActionValid:[self.webview canGoForward] actionType:@"goForward"];
     [self updateButtonOnTheGo:self.stopButton isActionValid:self.frameCount > 0 actionType:@"stopLoading"];
-    [self updateButtonOnTheGo:self.reloadButton isActionValid:self.frameCount == 0 actionType:@"reload"];
+    [self updateButtonOnTheGo:self.reloadButton isActionValid:self.webview.request.URL
+     && self.frameCount == 0 actionType:@"reload"];
 }
 
-- (void)updateButtonOnTheGo:(UIButton *) button isActionValid:(BOOL) validFlag actionType:(NSString *) type {
+- (void)updateButtonOnTheGo:(UIButton *) button isActionValid:(BOOL) validFlag actionType: type {
+    [button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    
     if (validFlag) {
         if ([type isEqualToString:@"goBack"]) {
             [button addTarget:self.webview action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
