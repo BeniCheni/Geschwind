@@ -1,7 +1,8 @@
 # Geschwind
 
-*Geschwind* is fast in German. This iOS app is a minimal web browser.
+*Geschwind* is fast in German. This iOS app is a minimal web browser with black theme, dynamic buttons based on the page activities and security emphasis to self-clear browser history per exit.
 
+* Perform Google search with keyword if entry is not valid URL.
 * Black Theme
 * Error Alert Dialog Box
 * Provide dynamic buttons based on the page activities.
