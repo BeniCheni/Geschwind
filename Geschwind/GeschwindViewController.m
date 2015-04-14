@@ -86,19 +86,19 @@
     
     self.textField.frame = CGRectMake(0, 0, width, itemHeight);
     self.webview.frame = CGRectMake(0, CGRectGetMaxY(self.textField.frame), width, browserHeight);
-    self.toolbar.frame = CGRectMake(20, 100, 280, 60);
+    self.toolbar.frame = CGRectMake(135, 30, 280, 60);
 }
 
 #pragma mark - FloatToolbarDelegate
 
 - (void)floatingToolbar:(FloatingToolbar *)toolbar didSelectButtonWithTitle:(NSString *)title {
-    if([title isEqual:NSLocalizedString(@"Back", @"Back command")]) {
+    if([title isEqual:kWebBrowserBackString]) {
         [self.webview goBack];
-    } else if ([title isEqual:NSLocalizedString(@"Forward", @"Forward command")]) {
+    } else if ([title isEqual:kWebBrowserForwardString]) {
         [self.webview goForward];
-    } else if ([title isEqual:NSLocalizedString(@"Stop", @"Stop command")]) {
+    } else if ([title isEqual:kWebBrowserStopString]) {
         [self.webview stopLoading];
-    } else if ([title isEqual:NSLocalizedString(@"Refresh", @"Reload command")]) {
+    } else if ([title isEqual:kWebBrowserRefreshString]) {
         [self.webview reload];
     }
 }
@@ -212,7 +212,8 @@
     [self.toolbar setEnabled:[self.webview canGoBack] forButtonWithTitle:kWebBrowserBackString];
     [self.toolbar setEnabled:[self.webview canGoForward] forButtonWithTitle:kWebBrowserForwardString];
     [self.toolbar setEnabled:self.frameCount > 0 forButtonWithTitle:kWebBrowserStopString];
-    [self.toolbar setEnabled:self.webview.request.URL && self.frameCount == 0 forButtonWithTitle:kWebBrowserRefreshString];
+    [self.toolbar setEnabled:[self.webview.request.URL.absoluteString length] > 0
+        && self.frameCount == 0 forButtonWithTitle:kWebBrowserRefreshString];
 }
 
 /*

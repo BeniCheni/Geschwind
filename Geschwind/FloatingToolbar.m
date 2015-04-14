@@ -35,7 +35,7 @@
         for (NSString *currentTitle in self.currentTitles) {
             UILabel *label = [UILabel new];
             label.userInteractionEnabled = NO;
-            label.alpha = 0.1;
+            label.alpha = 0.25;
             
             NSUInteger currentTitleIndex = [self.currentTitles indexOfObject:currentTitle];
             label.textAlignment = NSTextAlignmentCenter;
@@ -63,8 +63,8 @@
     // | 2 | 3 |
     for (UILabel *thisLabel in self.labels) {
         NSUInteger currentLabelIndex = [self.labels indexOfObject:thisLabel];
-        CGFloat labelHeight = CGRectGetHeight(self.bounds) / 2;
-        CGFloat labelWidth = CGRectGetWidth(self.bounds) / 2;
+        CGFloat labelHeight = CGRectGetHeight(self.bounds) / 2.5;
+        CGFloat labelWidth = CGRectGetWidth(self.bounds) / 2.5;
         CGFloat labelX = 0;
         CGFloat labelY = 0;
         
@@ -101,38 +101,38 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UILabel *label = [self labelFromTouches:touches withEvent:event];
     
-        self.currentLabel = label;
-        self.currentLabel.alpha = 0.4;
+    self.currentLabel = label;
+    self.currentLabel.alpha = 0.6;
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     UILabel *label = [self labelFromTouches:touches withEvent:event];
 
-        if (self.currentLabel != label) {
-            // The label being touched is no longer the initial label
-            self.currentLabel.alpha = 0.4;
-        } else {
-            self.currentLabel.alpha = 0.1;
-        }
+    if (self.currentLabel != label) {
+        // The label being touched is no longer the initial label
+        self.currentLabel.alpha = 0.6;
+    } else {
+        self.currentLabel.alpha = 0.25;
+    }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     UILabel *label = [self labelFromTouches:touches withEvent:event];
     
-        if (self.currentLabel == label) {
-            NSLog(@"Label tapped: %@", (NSString *) self.currentLabel.text);
-
-            if ([self.delegate respondsToSelector:@selector(floatingToolbar:didSelectButtonWithTitle:)]) {
-                [self.delegate floatingToolbar:self didSelectButtonWithTitle:self.currentLabel.text];
-            }
+    if (self.currentLabel == label) {
+        NSLog(@"Label tapped: %@", (NSString *) self.currentLabel.text);
+        
+        if ([self.delegate respondsToSelector:@selector(floatingToolbar:didSelectButtonWithTitle:)]) {
+            [self.delegate floatingToolbar:self didSelectButtonWithTitle:self.currentLabel.text];
         }
+    }
     
-        self.currentLabel.alpha = 0.4;
-        self.currentLabel = nil;
+    self.currentLabel.alpha = 0.6;
+    self.currentLabel = nil;
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    self.currentLabel.alpha = 0.4;
+    self.currentLabel.alpha = 0.6;
     self.currentLabel = nil;
 }
 
@@ -144,7 +144,7 @@
     if (index != NSNotFound) {
         UILabel *label = [self.labels objectAtIndex:index];
         label.userInteractionEnabled = enabled;
-        label.alpha = enabled ? 0.4 : 0.1;
+        label.alpha = enabled ? 0.6 : 0.25;
         label.hidden = !enabled;
     }
 }
