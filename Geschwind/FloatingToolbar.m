@@ -35,7 +35,7 @@
         for (NSString *currentTitle in self.currentTitles) {
             UILabel *label = [UILabel new];
             label.userInteractionEnabled = NO;
-            label.alpha = 0.25;
+            label.alpha = 0.15;
             
             NSUInteger currentTitleIndex = [self.currentTitles indexOfObject:currentTitle];
             label.textAlignment = NSTextAlignmentCenter;
@@ -43,7 +43,6 @@
             label.text = [self.currentTitles objectAtIndex:currentTitleIndex];
             label.backgroundColor = [self.colors objectAtIndex:currentTitleIndex];
             label.textColor = [UIColor whiteColor];
-            label.hidden = YES;
             
             [labelsArray addObject:label];
         }
@@ -102,7 +101,7 @@
     UILabel *label = [self labelFromTouches:touches withEvent:event];
     
     self.currentLabel = label;
-    self.currentLabel.alpha = 0.6;
+    self.currentLabel.alpha = 0.85;
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -110,29 +109,28 @@
 
     if (self.currentLabel != label) {
         // The label being touched is no longer the initial label
-        self.currentLabel.alpha = 0.6;
+        self.currentLabel.alpha = 0.85;
     } else {
-        self.currentLabel.alpha = 0.25;
+        self.currentLabel.alpha = 0.15;
     }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     UILabel *label = [self labelFromTouches:touches withEvent:event];
     
-    if (self.currentLabel == label) {
-        NSLog(@"Label tapped: %@", (NSString *) self.currentLabel.text);
+    if ([label isKindOfClass:[UILabel class]]
+            && self.currentLabel == label
+            && [self.delegate respondsToSelector:@selector(floatingToolbar:didSelectButtonWithTitle:)]) {
         
-        if ([self.delegate respondsToSelector:@selector(floatingToolbar:didSelectButtonWithTitle:)]) {
-            [self.delegate floatingToolbar:self didSelectButtonWithTitle:self.currentLabel.text];
-        }
+        [self.delegate floatingToolbar:self didSelectButtonWithTitle:self.currentLabel.text];
     }
     
-    self.currentLabel.alpha = 0.6;
+    self.currentLabel.alpha = 0.85;
     self.currentLabel = nil;
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    self.currentLabel.alpha = 0.6;
+    self.currentLabel.alpha = 0.85;
     self.currentLabel = nil;
 }
 
@@ -144,8 +142,7 @@
     if (index != NSNotFound) {
         UILabel *label = [self.labels objectAtIndex:index];
         label.userInteractionEnabled = enabled;
-        label.alpha = enabled ? 0.6 : 0.25;
-        label.hidden = !enabled;
+        label.alpha = enabled ? 0.85 : 0.15;
     }
 }
 
