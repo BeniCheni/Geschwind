@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FE1BB74D1ADC604E00F39B1C /* FloatingToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = FE1BB74C1ADC604E00F39B1C /* FloatingToolbar.m */; };
 		FE71F78F1AD76E5600D5E343 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FE71F78E1AD76E5600D5E343 /* main.m */; };
 		FE71F7921AD76E5600D5E343 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FE71F7911AD76E5600D5E343 /* AppDelegate.m */; };
 		FE71F7981AD76E5600D5E343 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE71F7961AD76E5600D5E343 /* Main.storyboard */; };
@@ -27,6 +28,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FE1BB74B1ADC604E00F39B1C /* FloatingToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloatingToolbar.h; sourceTree = "<group>"; };
+		FE1BB74C1ADC604E00F39B1C /* FloatingToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FloatingToolbar.m; sourceTree = "<group>"; };
 		FE71F7891AD76E5600D5E343 /* Geschwind.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Geschwind.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE71F78D1AD76E5600D5E343 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FE71F78E1AD76E5600D5E343 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -85,6 +88,8 @@
 				FE71F7911AD76E5600D5E343 /* AppDelegate.m */,
 				FEB797A81AD770710013BAA0 /* GeschwindViewController.h */,
 				FEB797A91AD770710013BAA0 /* GeschwindViewController.m */,
+				FE1BB74B1ADC604E00F39B1C /* FloatingToolbar.h */,
+				FE1BB74C1ADC604E00F39B1C /* FloatingToolbar.m */,
 				FE71F7961AD76E5600D5E343 /* Main.storyboard */,
 				FE71F7991AD76E5600D5E343 /* Images.xcassets */,
 				FE71F79B1AD76E5600D5E343 /* LaunchScreen.xib */,
@@ -222,6 +227,7 @@
 				FE71F7921AD76E5600D5E343 /* AppDelegate.m in Sources */,
 				FE71F78F1AD76E5600D5E343 /* main.m in Sources */,
 				FEB797AA1AD770710013BAA0 /* GeschwindViewController.m in Sources */,
+				FE1BB74D1ADC604E00F39B1C /* FloatingToolbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
