@@ -223,7 +223,7 @@
     CGRect potentialNewFrame = CGRectMake(newPoint.x, newPoint.y, CGRectGetWidth(toolbar.frame), CGRectGetHeight(toolbar.frame));
     
     
-//    if (CGRectContainsRect(self.view.frame, potentialNewFrame)) {
+//    if (CGRectContainsRect(self.view.bounds, potentialNewFrame)) {
         toolbar.frame = potentialNewFrame;
 //    }
 }
