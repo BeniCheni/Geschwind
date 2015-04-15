@@ -5,9 +5,11 @@
 * Perform Google search with keyword if entry is not valid URL.
 * Black Theme
 * Error Alert Dialog Box
-* Provide dynamic buttons based on the page activities.
+* Floating, colorful toolbar
 * Perform Google search with keyword if entry is not valid URL.
 * Emphasis on security to self-clear browser history per exit.
+ 
+Images to be updated...
 
 ![Demo 1](https://farm9.staticflickr.com/8820/16486399543_dddeb1bfee_c.jpg "Demo 1")
 
