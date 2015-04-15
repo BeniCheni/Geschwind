@@ -65,7 +65,7 @@
 //        [self addGestureRecognizer:self.pinchGesture];
         
         self.holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(holdFired:)];
-        self.holdGesture.minimumPressDuration = 1.0;
+        self.holdGesture.minimumPressDuration = 0.8;
         [self addGestureRecognizer:self.holdGesture];
     }
     

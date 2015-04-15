@@ -127,19 +127,15 @@
 //}
 
 - (void)didHoldButtonsWithColors:(NSArray *)buttons colors:(NSMutableArray *)colectCollection {
-    uint32_t upperBound = 4;
-    
     for (UILabel *button in buttons) {
-        NSUInteger numberOfRemainingColors = [colectCollection count];
+        uint32_t numberOfRemainingColors = (uint32_t) [colectCollection count];
         
         // Only shuffle color when there are remaining colors to pick. Avoid potential exception.
-        if (numberOfRemainingColors > 0
-                && numberOfRemainingColors == upperBound) {
-            uint32_t randomIndex = arc4random_uniform(upperBound);
+        if (numberOfRemainingColors > 0) {
+            uint32_t randomIndex = arc4random_uniform(numberOfRemainingColors);
             
             button.backgroundColor = colectCollection[randomIndex];
             [colectCollection removeObjectAtIndex:randomIndex];
-            upperBound--;
         }
     }
 }
