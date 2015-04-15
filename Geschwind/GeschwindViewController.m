@@ -19,6 +19,7 @@
 
 @property (nonatomic, assign) NSUInteger frameCount;
 
+
 #define kWebBrowserBackString NSLocalizedString(@"Back", @"Back command")
 #define kWebBrowserForwardString NSLocalizedString(@"Forward", @"Forward command")
 #define kWebBrowserStopString NSLocalizedString(@"Stop", @"Stop command")
@@ -86,7 +87,7 @@
     
     self.textField.frame = CGRectMake(0, 0, width, itemHeight);
     self.webview.frame = CGRectMake(0, CGRectGetMaxY(self.textField.frame), width, browserHeight);
-    self.toolbar.frame = CGRectMake(135, 30, 280, 60);
+    self.toolbar.frame = CGRectMake(80, 500, 280, 60);
 }
 
 #pragma mark - FloatToolbarDelegate
@@ -223,9 +224,9 @@
     CGRect potentialNewFrame = CGRectMake(newPoint.x, newPoint.y, CGRectGetWidth(toolbar.frame), CGRectGetHeight(toolbar.frame));
     
     
-//    if (CGRectContainsRect(self.view.bounds, potentialNewFrame)) {
+    if (CGRectContainsRect(self.view.bounds, potentialNewFrame)) {
         toolbar.frame = potentialNewFrame;
-//    }
+    }
 }
 
 /*

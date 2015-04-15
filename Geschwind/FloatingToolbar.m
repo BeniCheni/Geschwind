@@ -69,8 +69,8 @@
     // | 2 | 3 |
     for (UILabel *thisLabel in self.labels) {
         NSUInteger currentLabelIndex = [self.labels indexOfObject:thisLabel];
-        CGFloat labelHeight = CGRectGetHeight(self.bounds) / 2.5;
-        CGFloat labelWidth = CGRectGetWidth(self.bounds) / 2.5;
+        CGFloat labelHeight = CGRectGetHeight(self.bounds) / 2;
+        CGFloat labelWidth = CGRectGetWidth(self.bounds) / 2;
         CGFloat labelX = 0;
         CGFloat labelY = 0;
         
@@ -113,8 +113,6 @@
 - (void)panFired:(UIPanGestureRecognizer *)recognizer {
     if (recognizer.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [recognizer translationInView:self];
-        
-        NSLog(@"New translation: %@", NSStringFromCGPoint(translation));
         
         if ([self.delegate respondsToSelector:@selector(floatingToolbar:didTryToPanWithOffset:)]) {
             [self.delegate floatingToolbar:self didTryToPanWithOffset:translation];
