@@ -216,6 +216,18 @@
         && self.frameCount == 0 forButtonWithTitle:kWebBrowserRefreshString];
 }
 
+- (void)floatingToolbar:(FloatingToolbar *)toolbar didTryToPanWithOffset:(CGPoint)offset {
+    CGPoint startingPoint = toolbar.frame.origin;
+    CGPoint newPoint = CGPointMake(startingPoint.x + offset.x, startingPoint.y + offset.y);
+    
+    CGRect potentialNewFrame = CGRectMake(newPoint.x, newPoint.y, CGRectGetWidth(toolbar.frame), CGRectGetHeight(toolbar.frame));
+    
+    
+//    if (CGRectContainsRect(self.view.frame, potentialNewFrame)) {
+        toolbar.frame = potentialNewFrame;
+//    }
+}
+
 /*
 #pragma mark - Navigation
 

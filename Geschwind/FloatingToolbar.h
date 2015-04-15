@@ -15,6 +15,7 @@
 @optional
 
 - (void)floatingToolbar:(FloatingToolbar *)toolbar didSelectButtonWithTitle:(NSString *)title;
+- (void)floatingToolbar:(FloatingToolbar *)toolbar didTryToPanWithOffset:(CGPoint)offset;
 
 @end
 
@@ -24,9 +25,5 @@
 
 - (instancetype)initWithFourTitles:(NSArray *)titles;
 - (void)setEnabled:(BOOL)enabled forButtonWithTitle:(NSString *)title;
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
 
 @end
