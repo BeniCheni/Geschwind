@@ -226,7 +226,7 @@
     [self configureButtonOnTheGo:self.backButton isActionValid:[self.webview canGoBack] actionType:@"goBack"];
     [self configureButtonOnTheGo:self.forwardButton isActionValid:[self.webview canGoForward] actionType:@"goForward"];
     [self configureButtonOnTheGo:self.stopButton isActionValid:self.frameCount > 0 actionType:@"stopLoading"];
-    [self configureButtonOnTheGo:self.reloadButton isActionValid:self.webview.request.URL
+    [self configureButtonOnTheGo:self.reloadButton isActionValid:[self.webview.request.URL.absoluteString length] > 0
      && self.frameCount == 0 actionType:@"reload"];
 }
 
