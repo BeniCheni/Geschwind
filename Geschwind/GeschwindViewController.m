@@ -92,7 +92,7 @@
 
 #pragma mark - FloatToolbarDelegate
 
-- (void)floatingToolbar:(FloatingToolbar *)toolbar didSelectButtonWithTitle:(NSString *)title {
+- (void)didSelectButtonWithTitle:(NSString *)title {
     if([title isEqual:kWebBrowserBackString]) {
         [self.webview goBack];
     } else if ([title isEqual:kWebBrowserForwardString]) {
@@ -101,6 +101,46 @@
         [self.webview stopLoading];
     } else if ([title isEqual:kWebBrowserRefreshString]) {
         [self.webview reload];
+    }
+}
+
+- (void)floatingToolbar:(FloatingToolbar *)toolbar didTryToPanWithOffset:(CGPoint)offset {
+    CGPoint startingPoint = toolbar.frame.origin;
+    CGPoint newPoint = CGPointMake(startingPoint.x + offset.x, startingPoint.y + offset.y);
+    
+    CGRect potentialNewFrame = CGRectMake(newPoint.x, newPoint.y, CGRectGetWidth(toolbar.frame), CGRectGetHeight(toolbar.frame));
+    
+    if (CGRectContainsRect(self.view.bounds, potentialNewFrame)) {
+        toolbar.frame = potentialNewFrame;
+    }
+}
+
+//- (void)floatingToolbar:(FloatingToolbar *)toolbar didTryToPinchWithScale:(CGFloat)scale centerLocation: (CGPoint)center {
+//    CGSize startingSize = toolbar.frame.size;
+//    CGSize newSize = CGSizeMake(startingSize.width * scale, startingSize.height * scale);
+//    
+//    CGRect potentialNewFrame = CGRectMake(center.x, center.y, newSize.width, newSize.height);
+//    
+////    if (CGRectContainsRect(self.view.bounds, potentialNewFrame)) {
+//        toolbar.frame = potentialNewFrame;
+////    }
+//}
+
+- (void)didHoldButtonsWithColors:(NSArray *)buttons colors:(NSMutableArray *)colectCollection {
+    uint32_t upperBound = 4;
+    
+    for (UILabel *button in buttons) {
+        NSUInteger numberOfRemainingColors = [colectCollection count];
+        
+        // Only shuffle color when there are remaining colors to pick. Avoid potential exception.
+        if (numberOfRemainingColors > 0
+                && numberOfRemainingColors == upperBound) {
+            uint32_t randomIndex = arc4random_uniform(upperBound);
+            
+            button.backgroundColor = colectCollection[randomIndex];
+            [colectCollection removeObjectAtIndex:randomIndex];
+            upperBound--;
+        }
     }
 }
 
@@ -215,18 +255,6 @@
     [self.toolbar setEnabled:self.frameCount > 0 forButtonWithTitle:kWebBrowserStopString];
     [self.toolbar setEnabled:[self.webview.request.URL.absoluteString length] > 0
         && self.frameCount == 0 forButtonWithTitle:kWebBrowserRefreshString];
-}
-
-- (void)floatingToolbar:(FloatingToolbar *)toolbar didTryToPanWithOffset:(CGPoint)offset {
-    CGPoint startingPoint = toolbar.frame.origin;
-    CGPoint newPoint = CGPointMake(startingPoint.x + offset.x, startingPoint.y + offset.y);
-    
-    CGRect potentialNewFrame = CGRectMake(newPoint.x, newPoint.y, CGRectGetWidth(toolbar.frame), CGRectGetHeight(toolbar.frame));
-    
-    
-    if (CGRectContainsRect(self.view.bounds, potentialNewFrame)) {
-        toolbar.frame = potentialNewFrame;
-    }
 }
 
 /*

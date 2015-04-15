@@ -16,6 +16,9 @@
 @property (nonatomic, weak) UILabel *currentLabel;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
+//@property (nonatomic, strong) UIPinchGestureRecognizer *pinchGesture;
+
+@property (nonatomic, strong) UILongPressGestureRecognizer *holdGesture;
 
 @end
 
@@ -37,7 +40,7 @@
         for (NSString *currentTitle in self.currentTitles) {
             UILabel *label = [UILabel new];
             label.userInteractionEnabled = NO;
-            label.alpha = 0.15;
+            label.alpha = 0.25;
             
             NSUInteger currentTitleIndex = [self.currentTitles indexOfObject:currentTitle];
             label.textAlignment = NSTextAlignmentCenter;
@@ -58,6 +61,12 @@
         [self addGestureRecognizer:self.tapGesture];
         self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panFired:)];
         [self addGestureRecognizer:self.panGesture];
+//        self.pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchFired:)];
+//        [self addGestureRecognizer:self.pinchGesture];
+        
+        self.holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(holdFired:)];
+        self.holdGesture.minimumPressDuration = 1.0;
+        [self addGestureRecognizer:self.holdGesture];
     }
     
     return self;
@@ -103,8 +112,8 @@
         UIView *tappedView = [self hitTest:location withEvent:nil];
         
         if ([self.labels containsObject:tappedView]) {
-            if ([self.delegate respondsToSelector:@selector(floatingToolbar:didSelectButtonWithTitle:)]) {
-                [self.delegate floatingToolbar:self didSelectButtonWithTitle:((UILabel *)tappedView).text];
+            if ([self.delegate respondsToSelector:@selector(didSelectButtonWithTitle:)]) {
+                [self.delegate didSelectButtonWithTitle:((UILabel *)tappedView).text];
             }
         }
     }
@@ -122,6 +131,31 @@
     }
 }
 
+//- (void)pinchFired:(UIPinchGestureRecognizer *)recognizer {
+//    if (recognizer.state == UIGestureRecognizerStateChanged) {
+//        CGFloat scale = [recognizer scale];
+//        CGPoint center = [recognizer locationInView:self];
+//        
+//        if ([self.delegate respondsToSelector:@selector(floatingToolbar:didTryToPinchWithScale:centerLocation:)]) {
+//            [self.delegate floatingToolbar:self didTryToPinchWithScale:scale centerLocation:center];
+//        }
+////        
+////        [recognizer setScale:1.0];
+//
+//    }
+//}
+
+- (void)holdFired:(UILongPressGestureRecognizer *)recognizer {
+    NSArray *buttons = self.labels;
+    NSMutableArray *colectCollection = [self.colors mutableCopy];
+    
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        if ([self.delegate respondsToSelector:@selector(didHoldButtonsWithColors:colors:)]) {
+            [self.delegate didHoldButtonsWithColors:buttons colors:colectCollection];
+        }
+    }
+}
+
 #pragma mark = Button Enabling
 
 - (void)setEnabled:(BOOL)enabled forButtonWithTitle:(NSString *)title {
@@ -130,7 +164,7 @@
     if (index != NSNotFound) {
         UILabel *label = [self.labels objectAtIndex:index];
         label.userInteractionEnabled = enabled;
-        label.alpha = enabled ? 0.85 : 0.15;
+        label.alpha = enabled ? 0.85 : 0.25;
     }
 }
 
