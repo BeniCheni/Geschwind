@@ -115,16 +115,9 @@
     }
 }
 
-//- (void)floatingToolbar:(FloatingToolbar *)toolbar didTryToPinchWithScale:(CGFloat)scale centerLocation: (CGPoint)center {
-//    CGSize startingSize = toolbar.frame.size;
-//    CGSize newSize = CGSizeMake(startingSize.width * scale, startingSize.height * scale);
-//    
-//    CGRect potentialNewFrame = CGRectMake(center.x, center.y, newSize.width, newSize.height);
-//    
-////    if (CGRectContainsRect(self.view.bounds, potentialNewFrame)) {
-//        toolbar.frame = potentialNewFrame;
-////    }
-//}
+- (void)floatingToolbar:(FloatingToolbar *)toolbar didTryToPinchWithScale:(CGFloat)scale {
+    toolbar.transform = CGAffineTransformScale(toolbar.transform, scale, scale);
+}
 
 - (void)didHoldButtonsWithColors:(NSArray *)buttons colors:(NSMutableArray *)colectCollection {
     for (UILabel *button in buttons) {

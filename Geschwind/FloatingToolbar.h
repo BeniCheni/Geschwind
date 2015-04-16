@@ -16,7 +16,7 @@
 
 - (void)didSelectButtonWithTitle:(NSString *)title;
 - (void)floatingToolbar:(FloatingToolbar *)toolbar didTryToPanWithOffset:(CGPoint)offset;
-//- (void)floatingToolbar:(FloatingToolbar *)toolbar didTryToPinchWithScale:(CGFloat)scale centerLocation:(CGPoint)center;
+- (void)floatingToolbar:(FloatingToolbar *)toolbar didTryToPinchWithScale:(CGFloat)scale;
 - (void)didHoldButtonsWithColors:(NSArray *)buttons colors:(NSMutableArray *)colectCollection;
 
 @end

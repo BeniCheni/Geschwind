@@ -16,8 +16,7 @@
 @property (nonatomic, weak) UILabel *currentLabel;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
-//@property (nonatomic, strong) UIPinchGestureRecognizer *pinchGesture;
-
+@property (nonatomic, strong) UIPinchGestureRecognizer *pinchGesture;
 @property (nonatomic, strong) UILongPressGestureRecognizer *holdGesture;
 
 @end
@@ -61,9 +60,8 @@
         [self addGestureRecognizer:self.tapGesture];
         self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panFired:)];
         [self addGestureRecognizer:self.panGesture];
-//        self.pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchFired:)];
-//        [self addGestureRecognizer:self.pinchGesture];
-        
+        self.pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchFired:)];
+        [self addGestureRecognizer:self.pinchGesture];
         self.holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(holdFired:)];
         self.holdGesture.minimumPressDuration = 0.8;
         [self addGestureRecognizer:self.holdGesture];
@@ -131,19 +129,14 @@
     }
 }
 
-//- (void)pinchFired:(UIPinchGestureRecognizer *)recognizer {
-//    if (recognizer.state == UIGestureRecognizerStateChanged) {
-//        CGFloat scale = [recognizer scale];
-//        CGPoint center = [recognizer locationInView:self];
-//        
-//        if ([self.delegate respondsToSelector:@selector(floatingToolbar:didTryToPinchWithScale:centerLocation:)]) {
-//            [self.delegate floatingToolbar:self didTryToPinchWithScale:scale centerLocation:center];
-//        }
-////        
-////        [recognizer setScale:1.0];
-//
-//    }
-//}
+- (void)pinchFired:(UIPinchGestureRecognizer *)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateChanged
+            && [self.delegate respondsToSelector:@selector(floatingToolbar:didTryToPinchWithScale:)]) {
+        
+        [self.delegate floatingToolbar:self didTryToPinchWithScale:recognizer.scale];
+        [recognizer setScale:1.0];
+    }
+}
 
 - (void)holdFired:(UILongPressGestureRecognizer *)recognizer {
     NSArray *buttons = self.labels;
